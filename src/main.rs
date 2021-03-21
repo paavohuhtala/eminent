@@ -109,6 +109,7 @@ impl BufferState {
 struct Frame {
     pub pos: (u16, u16),
     pub size: (u16, u16),
+    pub title: Option<String>,
 }
 
 fn draw_frame(frame: &Frame) -> Result<(), Box<dyn Error>> {
@@ -140,6 +141,15 @@ fn draw_frame(frame: &Frame) -> Result<(), Box<dyn Error>> {
         }
 
         stdout.queue(MoveToNextLine(1))?;
+    }
+
+    if let Some(title) = &frame.title {
+        let len = title.chars().count() as u16;
+        let mid = pos.0 + (size.0 / 2);
+        let text_start = mid - (len / 2);
+
+        stdout.queue(MoveTo(text_start, pos.1))?;
+        stdout.queue(Print(title))?;
     }
 
     stdout.queue(MoveTo(pos.0 + 1, pos.1 + 1))?;
@@ -179,6 +189,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut frame = Frame {
         pos: (0, 0),
         size: terminal::size()?,
+        title: Some(String::from(" eminent ")),
     };
 
     execute!(stdout(), Clear(ClearType::All),)?;
