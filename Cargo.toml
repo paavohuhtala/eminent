@@ -1,0 +1,9 @@
+[package]
+authors = ["Paavo Huhtala <paavo.huhtala@gmail.com>"]
+edition = "2018"
+name = "eminent"
+version = "0.1.0"
+
+[dependencies]
+crossterm = "0.19.0"
+xi-rope = "0.3.0"
