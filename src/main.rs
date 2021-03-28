@@ -76,7 +76,7 @@ impl BufferState {
                         .buffer
                         .lines(start_of_line..)
                         .next()
-                        .map(|line| line.chars().count())
+                        .map(|line| line.len())
                         .unwrap_or(0);
 
                     let new_offset = start_of_line + self.cursor.0.min(line_length);
@@ -102,7 +102,7 @@ impl BufferState {
                         .buffer
                         .lines(start_of_line..)
                         .next()
-                        .map(|line| line.chars().count())
+                        .map(|line| line.len())
                         .unwrap_or(0);
 
                     let new_offset = start_of_line + self.cursor.0.min(line_length);
@@ -293,7 +293,9 @@ fn main() -> Result<(), Box<dyn Error>> {
             match event {
                 Event::Resize(x, y) => {
                     frame.size = (x, y);
+                    execute!(stdout(), Clear(ClearType::All),)?;
                     draw_frame(&frame)?;
+                    render_buffer(&state.buffer)?;
                 }
                 Event::Key(KeyEvent {
                     code: KeyCode::Left,
